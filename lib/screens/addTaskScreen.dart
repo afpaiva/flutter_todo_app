@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_todo_app/styles.dart';
 import 'package:flutter_todo_app/task.dart';
 import '../widgets/tasksList.dart';
+import 'package:provider/provider.dart';
 
 class AddTaskScreen extends StatelessWidget {
   String newTask = '';
-  Function newTaskCallback;
-
-  AddTaskScreen({required this.newTaskCallback});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +33,7 @@ class AddTaskScreen extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            newTaskCallback(newTask);
+            Provider.of<TodoList>(context, listen: false).addNewTask(newTask);
             Navigator.pop(context);
           },
           style: ButtonStyle(

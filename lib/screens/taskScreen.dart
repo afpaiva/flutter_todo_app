@@ -2,17 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_todo_app/styles.dart';
 import 'package:flutter_todo_app/widgets/tasksList.dart';
 import 'addTaskScreen.dart';
-import '../task.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_todo_app/task.dart';
 
-class TaskScreen extends StatefulWidget {
-  @override
-  State<TaskScreen> createState() => _TaskScreenState();
-}
-
-class _TaskScreenState extends State<TaskScreen> {
-  TodoList todo = TodoList();
-
-  void showModal() {
+class TaskScreen extends StatelessWidget {
+  void showModal(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -20,13 +14,7 @@ class _TaskScreenState extends State<TaskScreen> {
         child: Container(
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: AddTaskScreen(
-            newTaskCallback: (value) {
-              setState(() {
-                todo.addNewTask(value);
-              });
-            },
-          ),
+          child: AddTaskScreen(),
         ),
       ),
     );
@@ -37,7 +25,7 @@ class _TaskScreenState extends State<TaskScreen> {
     return Scaffold(
       backgroundColor: s_MAIN_COLOR,
       floatingActionButton: FloatingActionButton.small(
-        onPressed: showModal,
+        onPressed: () => showModal(context),
         child: Icon(Icons.add),
         backgroundColor: s_MAIN_COLOR,
       ),
@@ -45,7 +33,7 @@ class _TaskScreenState extends State<TaskScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: showModal,
+            onTap: () => showModal(context),
             child: Container(
               padding: EdgeInsets.only(
                 top: 60.0,
@@ -77,7 +65,7 @@ class _TaskScreenState extends State<TaskScreen> {
                     ),
                   ),
                   Text(
-                    '${todo.tasks.length} Tasks',
+                    '${Provider.of<TodoList>(context).getLength()} Tasks',
                     style: TextStyle(
                       color: s_ACCENT_COLOR,
                       fontSize: 18,
@@ -98,7 +86,7 @@ class _TaskScreenState extends State<TaskScreen> {
                 ),
                 color: s_LIGHT_COLOR,
               ),
-              child: TaskList(todo),
+              child: TaskList(),
             ),
           ),
         ],

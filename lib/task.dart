@@ -1,18 +1,29 @@
-class Task {
-  final String name;
-  bool isDone;
+import 'package:flutter/foundation.dart';
 
-  Task({this.name = '', this.isDone = false});
+class TodoList extends ChangeNotifier {
+  final List<Map> _tasks = [];
 
-  void toggleDone() {
-    isDone = !isDone;
+  int getLength() {
+    return _tasks.length;
   }
-}
-
-class TodoList {
-  List<Task> tasks = [];
 
   void addNewTask(String title) {
-    tasks.add(Task(isDone: false, name: title));
+    _tasks.add({'name': title, 'isDone': false});
+    notifyListeners();
+  }
+
+  void markAsDone(int index) {
+    _tasks[index]['isDone'] = !_tasks[index]['isDone'];
+    notifyListeners();
+  }
+
+  void removeTask(int index) {
+    Map toDelete = _tasks[index];
+    _tasks.remove(toDelete);
+    notifyListeners();
+  }
+
+  List tasks() {
+    return _tasks;
   }
 }
